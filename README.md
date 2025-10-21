@@ -29,11 +29,6 @@ Here are some of my highlighted projects:
 
 ---
 
-## 📈 GitHub Stats
-![Anwesh's GitHub stats](https://github-readme-stats.vercel.app/api?username=Anwesh0018&show_icons=true&theme=dark&count_private=true)
-
----
-
 ## 📫 Contact Me
 - LinkedIn: [Anwesh Barpanda](https://www.linkedin.com/in/anwesh-barpanda/)  
 - Email: anwesh0018@example.com  
