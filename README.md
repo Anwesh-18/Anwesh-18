@@ -31,7 +31,7 @@ Here are some of my highlighted projects:
 
 ## 📫 Contact Me
 - LinkedIn: [Anwesh Barpanda](https://www.linkedin.com/in/anwesh-barpanda/)  
-- Email: anwesh0018@example.com  
+- Email: anweshbarpanda.02@gmail.com  
 - Portfolio: [Coming Soon]  
 
 ---
