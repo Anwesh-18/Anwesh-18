@@ -20,6 +20,12 @@ Welcome to my GitHub profile! I'm a passionate **B.Tech student** exploring **Ma
 
 ---
 
+## 🧩 LeetCode Stats
+
+![LeetCode Stats](https://leetcard.jacoblin.cool/anwesh_18)
+
+---
+
 ## 📂 Projects
 Here are some of my highlighted projects:  
 - [**StudyMate**](https://github.com/Anwesh0018/Studymate) - A platform providing notes and questions for competitive exams.  
