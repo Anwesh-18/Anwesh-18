@@ -1,0 +1,116 @@
+Q1: declare
+emps number;
+begin
+SELECT COUNT(*) INTO emps FROM emp WHERE job='manager';
+dbms_output.put_line('Total number of managers: '||(emps));
+end;
+
+Q2: declare
+emp_no number;
+emp_name VARCHAR2(50);
+jb VARCHAR2(50);
+sal number;
+begin
+SELECT empno,ename,job,mgr,hiredate,sal,comm,deptno INTO emp_no,e_name,jb,mgr,hiredate,salary,comm,deptno FROM emp WHERE empno=7369;
+dbms_output.put_line('Empno: '||(emp_no));
+dbms_output.put_line('Name: '||(e_name));
+dbms_output.put_line('job: '||(jb));
+dbms_output.put_line('Manager: '||(mgr));
+dbms_output.put_line('Hiredate: '||(hiredate));
+dbms_output.put_line('salary: '||(salary));
+dbms_output.put_line('Commision: '||(comm));
+dbms_output.put_line('Deptno: '||(deptno));
+end;
+
+Q3: declare
+emp_no number;
+joined_date DATE;
+begin
+emp_no:=:empno;
+SELECT ROUND(hiredate,'MONTH') INTO joined_date FROM emp WHERE empno=emp_no;
+dbms_output.put_line('Joined_date: '||(joined_date));
+end;
+
+Q4: declare
+large number;
+emp_no number;
+e_name VARCHAR2(50);
+jb VARCHAR2(30);
+mgr number;
+hiredate DATE;
+salary number;
+comm number;
+deptno number;
+begin
+SELECT MAX(sal) INTO large FROM emp;
+SELECT empno,ename,job,mgr,hiredate,sal,comm,deptno INTO emp_no,e_name,jb,mgr,hiredate,salary,comm,deptno FROM emp WHERE sal=(SELECT MAX(sal) FROM emp WHERE sal<large); 
+dbms_output.put_line('Empno: '||(emp_no));
+dbms_output.put_line('Name: '||(e_name));
+dbms_output.put_line('job: '||(jb));
+dbms_output.put_line('Manager: '||(mgr));
+dbms_output.put_line('Hiredate: '||(hiredate));
+dbms_output.put_line('salary: '||(salary));
+dbms_output.put_line('Commision: '||(comm));
+dbms_output.put_line('Deptno: '||(deptno));
+end;
+
+Q5. declare
+emp_no number;
+e_name VARCHAR2(50);
+jb VARCHAR2(30);
+mgr number;
+hiredate DATE;
+salary number;
+comm number;
+deptno number;
+begin
+SELECT empno,ename,job,mgr,hiredate,sal,comm,deptno INTO emp_no,e_name,jb,mgr,hiredate,salary,comm,deptno FROM emp WHERE deptno=40;
+dbms_output.put_line('Empno: '||(emp_no));
+dbms_output.put_line('Name: '||(e_name));
+dbms_output.put_line('job: '||(jb));
+dbms_output.put_line('Manager: '||(mgr));
+dbms_output.put_line('Hiredate: '||(hiredate));
+dbms_output.put_line('salary: '||(salary));
+dbms_output.put_line('Commision: '||(comm));
+dbms_output.put_line('Deptno: '||(deptno));
+end;
+
+Q6. declare
+e1_name VARCHAR2(50);
+e2_name VARCHAR2(50);
+begin
+SELECT ename INTO e1_name FROM emp WHERE sal=(SELECT MAX(sal) FROM emp);
+SELECT ename INTO e2_name FROM emp WHERE sal=(SELECT MIN(sal) FROM emp);
+dbms_output.put_line('Highest_salary: '||(e1_name));
+dbms_output.put_line('Lowest_salary: '||(e2_name));
+end;
+
+Q7. declare
+e_name VARCHAR2(50);
+begin
+SELECT ename INTO e_name FROM emp WHERE comm=(SELECT MAX(comm) FROM emp);
+dbms_output.put_line('Highest_Commission: '||(e_name));
+end;
+
+Q8: declare
+e_name VARCHAR(50);
+begin
+SELECT ename INTO e_name FROM emp WHERE ename LIKE '_M%';
+dbms_output.put_line('result: '||(e_name));
+end;
+
+Q9: declare
+e_name VARCHAR2(50);
+begin
+SELECT ename INTO e_name FROM emp WHERE hiredate = (SELECT MAX(hiredate) FROM emp);
+dbms_output.put_line('result: '||(e_name));
+end;
+
+Q10: declare
+emp_no NUMERIC(10,2);
+e_sal number;
+begin
+emp_no:=:empno;
+SELECT sal INTO e_sal FROM emp WHERE empno=emp_no;
+dbms_output.put_line('result: '||(e_sal));
+end;
