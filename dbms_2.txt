@@ -1,0 +1,239 @@
+1: DECLARE
+    dup_row EXCEPTION;
+    PRAGMA EXCEPTION_INIT(dup_row, -12345);
+    s_row student%rowtype;
+    CURSOR s_cur IS SELECT * FROM student;
+    r number;
+    n VARCHAR2(50);
+    m number;
+BEGIN
+r:=:Roll;
+n:=:Name;
+m:=:Mark;
+OPEN s_cur;
+LOOP 
+FETCH s_cur INTO s_row;
+    CASE 
+        WHEN r = s_row.roll THEN 
+            RAISE dup_row;
+        WHEN n = s_row.name THEN 
+            RAISE dup_row;
+        ELSE 
+            dbms_output.put_line('valid data');                
+    END CASE;                
+END LOOP;
+EXCEPTION
+    WHEN dup_row THEN
+        dbms_output.put_line('Error: Same student already Exists!! Code: ' || SQLCODE);               
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+
+2: DECLARE
+    min_sal_excep EXCEPTION;
+    max_sal_excep EXCEPTION;
+    PRAGMA EXCEPTION_INIT(max_sal_excep, -12345);
+    PRAGMA EXCEPTION_INIT(min_sal_excep, -12344); 
+    max_sal number;
+    min_sal number;
+    deptno number;               
+    CURSOR emp_cur IS SELECT deptno,MIN(sal), MAX(sal) FROM emp GROUP BY deptno;
+    
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO deptno,min_sal,max_sal;
+    CASE 
+        WHEN min_sal < 1000 THEN 
+            RAISE min_sal_excep;
+        WHEN max_sal > 4000 THEN 
+            RAISE max_sal_excep;
+        ELSE 
+            dbms_output.put_line('valid data');                
+    END CASE;                
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+    WHEN max_sal_excep THEN
+        dbms_output.put_line('Error: Maximum Salary reached!! Code: ' || SQLCODE); 
+        dbms_output.put_line('DEPT:'||(deptno));
+    WHEN min_sal_excep THEN
+        dbms_output.put_line('Error: Minimum Salary reached!! Code: ' || SQLCODE);
+        dbms_output.put_line('DEPT:'||(deptno));              
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+
+3: DECLARE
+    low_employee EXCEPTION;
+    PRAGMA EXCEPTION_INIT(low_employee, -12345);
+    dno number;
+    name VARCHAR2(50);               
+    CURSOR emp_cur IS SELECT ename,deptno FROM emp;
+    
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO name,dno;
+    CASE 
+        WHEN dno < 4 THEN 
+            RAISE low_employee;
+        ELSE 
+            dbms_output.put_line('valid data');                
+    END CASE;                
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+    WHEN low_employee THEN
+        dbms_output.put_line('Error: Invalid Dept Number!! Code: ' || SQLCODE); 
+        dbms_output.put_line('DEPT:'||(dno)||'Name:'||(name));            
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+4: DECLARE
+    no_commission_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(no_commission_exp, -12345);
+    comm number;
+    name VARCHAR2(50);               
+    CURSOR emp_cur IS SELECT ename,comm FROM emp WHERE deptno=30;
+    
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO name,comm;
+    CASE 
+        WHEN comm IS NULL THEN 
+            RAISE no_commission_exp;
+        ELSE 
+            dbms_output.put_line('valid data');                
+    END CASE;                
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+    WHEN no_commission_exp THEN
+        dbms_output.put_line('Error: No commission Paid!! Code: ' || SQLCODE); 
+        dbms_output.put_line('Name:'||(name));            
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+5: DECLARE
+    extra_project EXCEPTION;
+    PRAGMA EXCEPTION_INIT(extra_project, -12345);
+    cnt number;
+    eno number;
+    name VARCHAR2(50);               
+    CURSOR emp_cur IS SELECT empno,COUNT(*) FROM project GROUP BY empno;
+    
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO eno,cnt;
+    CASE 
+        WHEN cnt>4 THEN 
+            RAISE extra_project;
+        ELSE 
+            dbms_output.put_line('valid data');                
+    END CASE;                
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+    WHEN extra_project THEN
+        dbms_output.put_line('Error: Project Limit Exceeded!! Code: ' || SQLCODE);
+        SELECT ename INTO name FROM emp WHERE empno=eno;
+        dbms_output.put_line('Name:'||(name));            
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+
+6: DECLARE
+    my_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(my_exp, -12345);
+    name VARCHAR2(50);
+    job VARCHAR2(50);               
+    CURSOR emp_cur IS SELECT ename,job FROM emp;
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO name,job;
+    CASE 
+        WHEN emp_cur%ROWCOUNT>2 THEN 
+            RAISE my_exp;
+        ELSE 
+            dbms_output.put_line('Name:'||name);
+            dbms_output.put_line('job:'||job);
+            dbms_output.put_line('-----------');   
+    END CASE;                
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+    WHEN my_exp THEN
+        dbms_output.put_line('Error:Limit Exceeded!! Code: ' || SQLCODE);          
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+
+7:DECLARE
+    low_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(low_exp, -12345);
+    name VARCHAR2(50);
+    year number               
+    CURSOR emp_cur IS SELECT ename,EXTRACT(YEAR FROM SYSDATE)-EXTRACT(YEAR FROM hiredate) FROM emp;
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO name,year;
+    CASE 
+        WHEN year<15 THEN 
+            RAISE low_exp;
+        ELSE 
+            dbms_output.put_line('Name:'||name);
+            dbms_output.put_line('years:'||year);
+            dbms_output.put_line('-----------');   
+    END CASE;  
+                  
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+
+    WHEN low_exp THEN
+        dbms_output.put_line('Error:Not Enough Experienced!! Code: ' || SQLCODE);          
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
+
+8: DECLARE
+    no_employee EXCEPTION;
+    PRAGMA EXCEPTION_INIT(no_employee, -12345);
+    name VARCHAR2(50);
+    dname VARCHAR2(50);
+    dno number;              
+    CURSOR emp_cur IS SELECT ename,d.deptno,dname FROM emp e RIGHT OUTER JOIN dept d ON (e.deptno=d.deptno);
+BEGIN
+OPEN emp_cur;
+LOOP 
+FETCH emp_cur INTO name,dno,dname;
+    EXIT WHEN emp_cur%NOTFOUND;
+    CASE 
+        WHEN name IS NULL THEN 
+            RAISE no_employee;
+        ELSE 
+            dbms_output.put_line('Name:'||name);
+            dbms_output.put_line('-----------');   
+    END CASE;  
+                  
+END LOOP;
+CLOSE emp_cur;
+EXCEPTION
+
+    WHEN no_employee THEN
+        dbms_output.put_line('Error:No employee exists!! Code: ' || SQLCODE);  
+        dbms_output.put_line('DEPT:'||(dno));        
+    WHEN OTHERS THEN
+        dbms_output.put_line('An unexpected error occurred: ' || SQLERRM);
+END;
